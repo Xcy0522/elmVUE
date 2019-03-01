@@ -111,7 +111,7 @@
                     <section class="amount" @click="isOpenCart=!isOpenCart">
                       ￥{{(totalmoney).toFixed(2)}}
                       <br>
-                      <span>{{va.activity&&va.activity}}</span>
+                      <span>{{shopInfo.piecewise_agent_fee&&shopInfo.piecewise_agent_fee.tips}}</span>
                     </section>
                     <transition name="slide-fade">
                       <div class="bottom_cart_list" v-show="isOpenCart&&total">
