@@ -27,7 +27,7 @@
           </p>
         </nav>
       </el-header>
-      <el-main ref="main">
+      <el-main ref="main" v-if="tabPosition=='left'">
         <el-container class="shop_shop">
           <el-aside width="0.9rem">
             <ul
@@ -159,10 +159,13 @@
           </el-main>
         </el-container>
       </el-main>
+      <Appranse v-if="tabPosition=='right'"></Appranse>
+
     </el-container>
   </div>
 </template>
 <script>
+import Appranse from './appranse/appranse'
 export default {
   data() {
     return {
@@ -198,6 +201,9 @@ export default {
       },//选择规格储存..
       isSelected:false,//选择规格开关...
     };
+  },
+  components: {
+     Appranse
   },
   created() {
     this.getShopInfo();
