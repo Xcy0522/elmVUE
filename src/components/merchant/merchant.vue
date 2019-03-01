@@ -2,11 +2,11 @@
   <!-- 附近商家 -->
   <div class="merchant">
     <!-- 商家列表 -->
-    <ul class="merchant_list" >
-        <li v-for="(con, index) in content_on" :key="index" >
-          <!-- 引路由 -->
-      <div @click="gotoApprance(con.id,con.latitude,con.longitude)">
-         <img :src="'//elm.cangdu.org/img/'+con.image_path" alt>
+    <ul class="merchant_list">
+      <li v-for="(con, index) in content_on" :key="index">
+        <!-- 引路由 -->
+        <div @click="gotoApprance(con.id,con.latitude,con.longitude)">
+          <img :src="'//elm.cangdu.org/img/'+con.image_path" alt>
           <div class="brand">
             <span class="brand_on">品牌</span>
             <span class="brand_t">{{con.name}}</span>
@@ -37,7 +37,7 @@
               <!-- <p class="bot_left"> -->
               <span
                 style="color: grey"
-              >&nbsp;&nbsp;￥{{con.float_minimum_order_amount}}起送 / 配送费约{{con.float_delivery_fee}}元</span>
+              >&nbsp;&nbsp;￥{{con.float_minimum_order_amount}}起送/配送费约{{con.float_delivery_fee}}元</span>
               <!-- </p> -->
               <p class="bot_right">
                 <span style="color: grey">{{con.distance}}/</span>
@@ -45,9 +45,8 @@
               </p>
             </div>
           </div>
-      </div>
-        </li>
-       
+        </div>
+      </li>
     </ul>
   </div>
 </template>
@@ -74,17 +73,17 @@ export default {
         console.log("111", res);
         this.content_on = res.data;
       });
-    },  
-    gotoApprance(id,latitude,longitude){
-      localStorage.setItem("storeId","id");
+    },
+    gotoApprance(id, latitude, longitude) {
+      localStorage.setItem("storeId", "id");
       this.$router.push({
-        name: 'shop',
+        name: "shop",
         query: {
-          id:id,
-          geohash:latitude + ',' + longitude,
+          id: id,
+          geohash: latitude + "," + longitude
         }
-      })
-    } 
+      });
+    }
   }
 };
 </script>
@@ -96,6 +95,9 @@ export default {
   height: 0.67rem;
   margin-bottom: 0.21rem;
   float: left;
+}
+.merchant_list {
+  margin-bottom: 0.5rem;
 }
 .brand {
   width: 2.84rem;
@@ -114,7 +116,7 @@ export default {
   margin-left: 0.08rem;
 }
 .brand_t {
-    color: #333;
+  color: #333;
   font-size: 0.16rem;
   font-weight: 700;
 }
