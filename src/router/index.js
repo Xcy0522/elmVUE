@@ -32,6 +32,7 @@ import Detail1 from '@/page/points/detail1/detail1'
 
 
 import Order from '@/page/order/order'
+import OrderDetail from '@/page/order/orderDetail/orderDetail'
 import Store from '@/page/store/store'
 
 import Vipcard from '@/page/vipcard/vipcard'
@@ -43,6 +44,7 @@ import ConfirmOrder from '@/page/confirmOrder/confirmOrder'
 import Payment from '@/page/confirmOrder/children/payment'
 
 import Shop from '@/page/shop/shop'
+import ShopDetail from '@/page/shop/shopDetail'
 
 import Service from '@/page/service/service'
 import QuestionDetail from '@/page/service/questionDetail'
@@ -57,7 +59,7 @@ import Invoice from '@/page/confirmOrder/invoice/invoice'
 import ChooseAddress from '@/page/confirmOrder/chooseAddress/chooseAddress'
 import AddAddress from '@/page/confirmOrder/chooseAddress/addAddress/addAddress'
 import SearchAddress from '@/page/confirmOrder/chooseAddress/addAddress/searchAddress/searchAddress'
- 
+
 
 
 
@@ -73,239 +75,246 @@ import SearchAddress from '@/page/confirmOrder/chooseAddress/addAddress/searchAd
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      redirect: '/home',
-    },
-    {
-      path: '/buffer',
-      name: 'buffer',
-      component: Buffer1
-    },
+    routes: [{
+            path: '/',
+            redirect: '/home',
+        },
+        {
+            path: '/buffer',
+            name: 'buffer',
+            component: Buffer1
+        },
 
 
 
-    {
-      path: '/home',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: Login
-    },
-    {
-      path: '/forget',
-      name: 'forget',
-      component: Forget
-    },
-    {
-      path: '/city/:id',
-      name: 'city',
-      component: City
-    },
-    {
-      path: '/msite',
-      name: 'msite',
-      component: Msite
-    },
-    {
-      path: '/search',
-      name: 'search',
-      component: Search
-    },
+        {
+            path: '/home',
+            name: 'home',
+            component: Home
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: Login
+        },
+        {
+            path: '/forget',
+            name: 'forget',
+            component: Forget
+        },
+        {
+            path: '/city/:id',
+            name: 'city',
+            component: City
+        },
+        {
+            path: '/msite',
+            name: 'msite',
+            component: Msite
+        },
+        {
+            path: '/search',
+            name: 'search',
+            component: Search
+        },
 
-    {
-      path: '/food',
-      name: 'food',
-      component: Food
-    },
-    {
-      path: '/profile',
-      name: 'profile',
-      component: Profile
-    },
-    {
-      path: '/profile/info',
-      name: 'info',
-      component: Info
-    },
-    {
-      path: '/profile/info/setusername',
-      name: 'setusername',
-      component: Setusername
-    },
-    {
-      path: '/profile/info/address',
-      name: 'address',
-      component: Address
-    },
-    {
-      path: '/profile/info/address/add',
-      name: 'add',
-      component: Add
-    },
-    {
-      path: '/profile/info/address/add/addDetail',
-      name: 'addDetail',
-      component: Adddetail
-    },
-    {
-      path: '/benefit',
-      name: 'benefit',
-      component: Benefit
-    },
-    {
-      path: '/benefit/hbDescription',
-      name: 'hbDescription',
-      component: HbDescription
-    },
-    {
-      path: '/benefit/hbHistory',
-      name: 'hbHistory',
-      component: HbHistory
-    },
-    {
-      path: '/benefit/exchange',
-      name: 'exchange',
-      component: Exchange
-    },
+        {
+            path: '/food',
+            name: 'food',
+            component: Food
+        },
+        {
+            path: '/profile',
+            name: 'profile',
+            component: Profile
+        },
+        {
+            path: '/profile/info',
+            name: 'info',
+            component: Info
+        },
+        {
+            path: '/profile/info/setusername',
+            name: 'setusername',
+            component: Setusername
+        },
+        {
+            path: '/profile/info/address',
+            name: 'address',
+            component: Address
+        },
+        {
+            path: '/profile/info/address/add',
+            name: 'add',
+            component: Add
+        },
+        {
+            path: '/profile/info/address/add/addDetail',
+            name: 'addDetail',
+            component: Adddetail
+        },
+        {
+            path: '/benefit',
+            name: 'benefit',
+            component: Benefit
+        },
+        {
+            path: '/benefit/hbDescription',
+            name: 'hbDescription',
+            component: HbDescription
+        },
+        {
+            path: '/benefit/hbHistory',
+            name: 'hbHistory',
+            component: HbHistory
+        },
+        {
+            path: '/benefit/exchange',
+            name: 'exchange',
+            component: Exchange
+        },
 
-    {
-      path: '/benefit/commend',
-      name: 'commend',
-      component: Commend
-    },
-    {
-      path: '/benefit/coupon',
-      name: 'coupon',
-      component: Coupon
-    },
+        {
+            path: '/benefit/commend',
+            name: 'commend',
+            component: Commend
+        },
+        {
+            path: '/benefit/coupon',
+            name: 'coupon',
+            component: Coupon
+        },
 
-    {
-      path: '/balance',
-      name: 'balance',
-      component: Balance
-    },
-    {
-      path: '/balance/detail',
-      name: 'detail',
-      component: Detail
-    },
-    
-    {
-      path: '/shop',
-      name: 'shop',
-      component: Shop
-    },
-    {
-      path: '/points',
-      name: 'points',
-      component: Points
-    },
-    {
-      path: '/points/detail1',
-      name: 'detail1',
-      component: Detail1
-    },
+        {
+            path: '/balance',
+            name: 'balance',
+            component: Balance
+        },
+        {
+            path: '/balance/detail',
+            name: 'detail',
+            component: Detail
+        },
 
-    {
-      path: '/order',
-      name: 'order',
-      component: Order
-    },
-    {
-      path: '/store',
-      name: 'store',
-      component: Store
-    },
-    {
-      path: '/vipcard',
-      name: 'vipcard',
-      component: Vipcard,
-    },
-    {
-      path: '/vipcard/invoiceRecord',
-      name: 'invoiceRecord',
-      component: InvoiceRecord
-    },
-    {
-      path: '/vipcard/useCart',
-      name: 'useCart',
-      component: UseCart
-    },
-    {
-      path: '/vipcard/vipDescription',
-      name: 'vipDescription',
-      component: VipDescription
-    },
+        {
+            path: '/shop',
+            name: 'shop',
+            component: Shop,
+            children: [{
+                path: '/shopDetail',
+                name: 'shopDetail',
+                component: ShopDetail,
+            }]
+        },
+        {
+            path: '/points',
+            name: 'points',
+            component: Points
+        },
+        {
+            path: '/points/detail1',
+            name: 'detail1',
+            component: Detail1
+        },
 
-    {
-      path: '/service',
-      name: 'service',
-      component: Service
-    },
-    {
-      path: '/service/questionDetail',
-      name: 'questionDetail',
-      component: QuestionDetail
-    },
+        {
+            path: '/order',
+            name: 'order',
+            component: Order
+        },
+        {
+            path: '/order/orderDetail',
+            name: 'orderDetail',
+            component: OrderDetail
+        },
+        {
+            path: '/store',
+            name: 'store',
+            component: Store
+        },
+        {
+            path: '/vipcard',
+            name: 'vipcard',
+            component: Vipcard,
+        },
+        {
+            path: '/vipcard/invoiceRecord',
+            name: 'invoiceRecord',
+            component: InvoiceRecord
+        },
+        {
+            path: '/vipcard/useCart',
+            name: 'useCart',
+            component: UseCart
+        },
+        {
+            path: '/vipcard/vipDescription',
+            name: 'vipDescription',
+            component: VipDescription
+        },
 
-    // {
-    //   path: '/confirmOrder',
-    //   name: 'confirmOrder',
-    //   component: ConfirmOrder
-    // },
-    {
-      path: '/confirmOrder/payment',
-      name: 'payment',
-      component: Payment
-    },
-    {
-      path: '/download',
-      name: 'download',
-      component: Download
-    },
+        {
+            path: '/service',
+            name: 'service',
+            component: Service
+        },
+        {
+            path: '/service/questionDetail',
+            name: 'questionDetail',
+            component: QuestionDetail
+        },
 
-
-
-    {
-      path: '/confirmOrder',
-      name: 'confirmOrder',
-      component: ConfirmOrder,
-    },
-    {
-      path: '/confirmOrder/chooseAddress',
-      name: 'chooseAddress',
-      component: ChooseAddress
-    },
-    // 订单备注页
-    {
-      path: '/confirmOrder/remark',
-      name: 'remark',
-      component: Remark
-    },
-    // 发票
-    {
-      path: '/confirmOrder/invoice',
-      name: 'invoice',
-      component: Invoice
-    },
-    {
-      path: '/confirmOrder/chooseAddress/addAddress',
-      name: 'addAddress',
-      component: AddAddress
-    },
-    {
-      path: '/confirmOrder/chooseAddress/addAddressarchAddress',
-      name: 'searchAddress',
-      component: SearchAddress
-    }
+        // {
+        //   path: '/confirmOrder',
+        //   name: 'confirmOrder',
+        //   component: ConfirmOrder
+        // },
+        {
+            path: '/confirmOrder/payment',
+            name: 'payment',
+            component: Payment
+        },
+        {
+            path: '/download',
+            name: 'download',
+            component: Download
+        },
 
 
 
+        {
+            path: '/confirmOrder',
+            name: 'confirmOrder',
+            component: ConfirmOrder,
+        },
+        {
+            path: '/confirmOrder/chooseAddress',
+            name: 'chooseAddress',
+            component: ChooseAddress
+        },
+        // 订单备注页
+        {
+            path: '/confirmOrder/remark',
+            name: 'remark',
+            component: Remark
+        },
+        // 发票
+        {
+            path: '/confirmOrder/invoice',
+            name: 'invoice',
+            component: Invoice
+        },
+        {
+            path: '/confirmOrder/chooseAddress/addAddress',
+            name: 'addAddress',
+            component: AddAddress
+        },
+        {
+            path: '/confirmOrder/chooseAddress/addAddressarchAddress',
+            name: 'searchAddress',
+            component: SearchAddress
+        }
 
-  ]
+
+    ]
 })

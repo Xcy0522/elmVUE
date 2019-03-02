@@ -1,8 +1,10 @@
 <template>
   <div class="shop" ref="shop">
+    <router-view></router-view>
     <el-container class="headered">
-      <el-header height="1.50rem">
-        <div class="shopinfo">
+      <!-- 头部 -->
+      <el-header height="1.50rem" >
+        <div class="shopinfo" ref="shopHeader">
           <img :src="imgurl + shopInfo.image_path" class="bagImg">
           <div class="shopinfo_warp">
             <img :src="imgurl + shopInfo.image_path">
@@ -14,25 +16,71 @@
               </p>
               <p>公告:{{shopInfo.promotion_info}}</p>
             </section>
+            <!-- 优惠活动开始 -->
+            <div
+              v-if="(shopInfo.activities&&shopInfo.activities.length)"
+              class="activity"
+              @click="isActivityDetail = true"
+            >
+              <div>
+                <span
+                  :style="{backgroundColor:'#' + shopInfo.activities[0].icon_color}"
+                >{{shopInfo.activities[0].icon_name}}</span>
+                <span>{{shopInfo.activities[0].description}}(APP专享)</span>
+              </div>
+              <div>
+                <span>{{shopInfo.activities.length}}个活动</span>
+                <i class="el-icon-arrow-right"></i>
+              </div>
+            </div>
+            <!-- 优惠活动结束 -->
+            <!-- 优惠活动详情开始 -->
+            <div class="activityDetail" v-if="isActivityDetail">
+              <section class="activityName">
+                <h2>{{shopInfo.name}}</h2>
+              </section>
+              <section class="activityMessage">
+                <span class="discounts">优惠信息</span>
+              </section>
+              <ul>
+                <li v-for="(value,index) in shopInfo.activities" :key="index">
+                  <span :style="{backgroundColor:'#' + value.icon_color}">{{value.icon_name}}</span>
+                  <span>{{value.description}} (APP专享)</span>
+                </li>
+              </ul>
+
+              <section class="notice">
+                <span>商家公告</span>
+                <div>欢迎光临,用餐高峰请提前下单,谢谢</div>
+              </section>
+              <section class="delect">
+                <i @click="isActivityDetail = false" class="el-icon-circle-close-outline"></i>
+              </section>
+            </div>
+
+            <!-- 优惠活动详情结束 -->
           </div>
           <a href="javascript:history.back(-1)" class="iconfont icon-zuo"></a>
           <a href="#/shop/shopDetail" class="iconfont icon-you"></a>
         </div>
-        <nav class="shop_nav" style="height:0.5rem">
-          <p @click="tabPosition='left'" :class="{'nav_active':tabPosition=='left'}">
+        <!-- 导航 -->
+        <nav class="shop_nav" style="height:0.5rem" ref="shopNav">
+          <p @click="tabPosition=true" :class="{'nav_active':tabPosition}">
             <span>商品</span>
           </p>
-          <p @click="tabPosition='right'" :class="{'nav_active':tabPosition=='right'}">
+          <p @click="tabPosition=false" :class="{'nav_active':!tabPosition}">
             <span>评价</span>
           </p>
         </nav>
       </el-header>
-      <el-main ref="main" v-if="tabPosition=='left'">
-        <el-container class="shop_shop">
+      <!-- 内容 -->
+      <el-main ref="main">
+        <Appranse v-show="!tabPosition"></Appranse>
+        <el-container class="shop_shop" v-show="tabPosition">
+          <!-- 左侧滚动栏 -->
           <el-aside width="0.9rem">
             <ul
               class="left_warp"
-              @scroll="oscroll($event)"
               ref="leftUl"
               @touchmove="touchmove($event)"
             >
@@ -48,11 +96,17 @@
               </li>
             </ul>
           </el-aside>
+          <!-- 右侧详情页 -->
           <el-main>
-            <ul class="right_warp">
-              <li v-for="(v,i) in shopList" :id="'listId' + i" :key="i" class="right_list">
+            <ul class="right_warp" ref="right_ul_list">
+              <!-- 列表 -->
+              <li 
+                v-for="(v,i) in shopList" :key="i" 
+                class="right_list" :ref="'right_li_list'+i"
+                @touchmove="liTouchmove(i)"
+              >
                 <h4 class="main_title">
-                  {{v.name}}
+                  <b>{{v.name}}</b>
                   <span>{{v.description}}</span>
                   <!-- <b class="right"> -->
                   <el-popover
@@ -67,7 +121,7 @@
                   <!-- </b> -->
                 </h4>
 
-                <section class="right_lista" v-for="(va,index) in v.foods" :key="index">
+                <section class="right_lista" v-for="(va,index) in v.foods" :key="index" @click.stop="goFoodInfo(va)">
                   <img :src="'http://elm.cangdu.org/img/' + va.image_path" alt>
                   <div class="description_foodname">{{va.name}}</div>
                   <div class="food_description_content">{{va.description}}</div>
@@ -76,16 +130,19 @@
                   <div class="food_activity">
                     <span
                       :style="{color:'#'+(va.activity&&va.activity.image_text_color),
-                border:'1px solid #' + (va.activity&&va.activity.icon_color)}"
+                      border:'1px solid #' + (va.activity&&va.activity.icon_color)}"
                     >{{va.activity&&va.activity.image_text}}</span>
                   </div>
+                  <div class="food_price">
+                    <b>￥</b>{{va.specfoods[0].price}} <b v-if="va.specfoods.length>1">起</b>
+                    </div>
                   <div class="nowFood" v-if="va.attributes.length">
                     <span>新品</span>
                   </div>
                   <div
                     class="sign"
                     :style="{color:'#' + (va.attributes.length==2&&va.attributes[1].icon_color),
-                borderColor:'#' + (va.attributes.length==2&&va.attributes[1].icon_color)}"
+                    borderColor:'#' + (va.attributes.length==2&&va.attributes[1].icon_color)}"
                     v-if="va.attributes.length==2"
                   >
                     <span>{{va.attributes.length==2&&va.attributes[1].icon_name}}</span>
@@ -93,83 +150,101 @@
                   <div class="inShoppingCart">
                     <span
                       class="iconfont icon-jian"
-                      v-if="cartInfo[v.id]&&cartInfo[v.id][va.specfoods[0].food_id]"
-                      @click="LessMove($event,v,va.specfoods[0])"
-                    >{{cartInfo[v.id]&&cartInfo[v.id][va.specfoods[0].food_id]}}</span>
+                      v-if="va.specfoods.length==1&&cartInfo[v.id]&&cartInfo[v.id][va.specfoods[0].food_id]"
+                      @click.stop="LessMove($event,v,va.specfoods[0])"
+                    >
+                      {{cartInfo[v.id]&&cartInfo[v.id][va.specfoods[0].food_id]}}
+                    </span>
+                    <el-button 
+                      class="iconfont icon-jian" v-else-if="isSelectednum(v.id,va.specfoods)" 
+                      v-html="isSelectednum(v.id,va.specfoods)"
+                      :plain="true" @click.stop="$message({message:'多规格商品只能在购物车删除',iconClass:'a'})"
+                      customClass="prompt"
+                    >
+                    </el-button>
                     <span
                       class="iconfont icon-icons_add"
-                      @click="addMove($event,v,va.specfoods[0])"
+                      @click.stop="addMove($event,v,va.specfoods[0])"
                       v-if="va.specfoods.length==1"
                     ></span>
-                    <span class="specification" v-else @click="selectedAdd(v.id,va.specfoods)">选规格</span>
-                    
+                    <span class="specification" v-else @click.stop="selectedAdd(v.id,va.specfoods)">选规格</span>
                   </div>
-                  <section class="shoppingCart">
-                    <span class="iconfont icon-gouwuche1" :class=" !total &&'bagColorh'">
-                      <span class="numball" v-if="total">{{total}}</span>
-                    </span>
-                    <section class="amount" @click="isOpenCart=!isOpenCart">
-                      ￥{{(totalmoney).toFixed(2)}}
-                      <br>
-                      <span>{{shopInfo.piecewise_agent_fee&&shopInfo.piecewise_agent_fee.tips}}</span>
-                    </section>
-                    <transition name="slide-fade">
-                      <div class="bottom_cart_list" v-show="isOpenCart&&total">
-                        <header class="cart_title">
-                          <span>购物车</span>
-                          <span
-                            class="iconfont icon-iconfontshanchu2"
-                            @click="clearCarts()"
-                          >&nbsp;清空</span>
-                        </header>
-                        <ul class="cart_list">
-                          <li v-for="(v,i) in entities" :key="i" v-show="v[0].quantity">
-                            <span>{{v[0].name}}</span>
-                            <span class="price">￥{{v[0].price}}</span>
-                            <div>
-                              <i class="iconfont icon-jian" @click="lessCarts(v[0],i)"></i>
-                              {{v[0].quantity}}&nbsp;
-                              <i
-                                class="iconfont icon-icons_add"
-                                @click="addCarts(v[0],i)"
-                              ></i>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </transition>
-                    <span class="settlement" :class=" !total &&'bagColorh'">去结算</span>
-                  </section>
                 </section>
               </li>
+              <!-- 底部 -->
+              <div class="shoppingCart">
+                <span class="iconfont icon-gouwuche1" @click="isOpenCart=!isOpenCart" :class=" !total &&'bagColor'">
+                  <b class="numball" v-if="total">{{total}}</b>
+                </span>
+                <div class="amount" @click="isOpenCart=!isOpenCart">
+                  ￥{{(totalmoney).toFixed(2)}}
+                  <br>
+                  <span>{{'配送费'}}</span>
+                </div>
+                <transition name="slide-fade">
+                  <div class="bottom_cart_list" v-show="isOpenCart&&total">
+                    <header class="cart_title">
+                      <span>购物车</span>
+                      <span class="iconfont icon-iconfontshanchu2" @click="clearCarts()">&nbsp;清空</span>
+                    </header>
+                    <ul class="cart_list">
+                      <li v-for="(v,i) in entities" :key="i" v-show="v[0].quantity">
+                        <span>{{v[0].name}}</span>
+                        <span class="price">￥{{v[0].price}}</span>
+                        <div>
+                          <i class="iconfont icon-jian" @click="lessCarts(v[0],i)"></i>
+                          {{v[0].quantity}}&nbsp;
+                          <i
+                            class="iconfont icon-icons_add"
+                            @click="addCarts(v[0],i)"
+                          ></i>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </transition>
+                <span class="settlement" :class=" !total &&'bagColorh'" @touchstart="goSettlement()">去结算</span>
+              </div>
+              <!-- 底部 -->
+              <!-- 小球 -->
               <span class="ball" ref="ball"></span>
+              <!-- 遮罩 -->
               <div class="warp" v-show="isOpenCart&&total" @click="isOpenCart=!isOpenCart"></div>
+              <!-- 选择规格 -->
               <div class="selected" v-if="isSelected" @click.self="isSelected=!isSelected">
                 <div class="selected_warp">
-                  <h4>{{shopInfo.piecewise_agent_fee&&shopInfo.piecewise_agent_fee.tips}}</h4>
+                  <h4>{{selected.specfoods[selected.index].name}}</h4>
                   <p>规格</p>
-                  <span v-for="(v,i) in selected.specfoods" :key="i" @click="selected.index=i"
-                  :class="{'isSelected':selected.index==i}">
-                    {{v.specs_name}}
-                  </span>
-                  <footer><b>￥<i>{{selected.specfoods[selected.index].price}}</i></b> <button>加入购物车</button></footer>
+                  <span
+                    v-for="(v,i) in selected.specfoods"
+                    :key="i"
+                    @click="selected.index=i"
+                    :class="{'isSelected':selected.index==i}"
+                  >{{v.specs_name}}</span>
+                  <footer>
+                    <b>
+                      ￥
+                      <i>{{selected.specfoods[selected.index].price}}</i>
+                    </b>
+                    <button @click="selectedAddCarts(selected,selected.specfoods[selected.index])">加入购物车</button>
+                  </footer>
                 </div>
               </div>
             </ul>
           </el-main>
         </el-container>
       </el-main>
-      <Appranse v-if="tabPosition=='right'"></Appranse>
-
     </el-container>
+    
   </div>
 </template>
 <script>
-import Appranse from './appranse/appranse'
+import Appranse from "./appranse/appranse";
 export default {
   data() {
     return {
-      tabPosition: "left",
+      tabPosition: true,//切换导航..
+      //头部商家信息:(假数据)
       shopInfo: {
         name: "name",
         id: 3269,
@@ -185,78 +260,86 @@ export default {
         foods: [],
         foodSort: {}
       },
-      imgurl: "http://elm.cangdu.org/img/",
+      imgurl: "http://elm.cangdu.org/img/",//图片拼接地址..
+      //食品列表
       shopList: {},
+      //选择类.下标
       isopt: 0,
-      restaurant_id: this.$route.query.id || 1,
-      geohash: this.$route.query.geohash || "23.12497,113.26308,",
+      restaurant_id: this.$route.query.id || 1,//商铺id
+      geohash: this.$route.query.geohash || "23.12497,113.26308,",//经纬度
       cartInfo: {}, //选中食物记录
       ListInfo: {}, //类中选中食物总个数
       entities: {}, //请求参数entities 详情
       isOpenCart: false, //购物车开关
-      selected:{
-        id:1,
-        index:0,
-        specfoods:[],
-      },//选择规格储存..
-      isSelected:false,//选择规格开关...
+      selected: {
+        id: 1,
+        index: 0,
+        specfoods: []
+      }, //选择规格储存..
+      isSelected: false, //选择规格开关...
+      carts:{},//加入购物车请求返回数据...
+      isActivityDetail: false, // 活动描述详情
     };
   },
-  components: {
-     Appranse
-  },
   created() {
-    this.getShopInfo();
-    this.getShopList();
-    this.getcarts();
+    this.getShopInfo();//获取商铺信息
+    this.getShopList();//获取食品列表
+    this.getcarts();// 加入购物车
+  },
+  components: {
+    Appranse
   },
   computed: {
-    // 计算属性的 getter
+    // 购物车数量
     total() {
-      console.log("123");
       // `this` 指向 vm 实例
       let sum = obj => {
         let add = 0;
         for (let v in obj) {
           add += obj[v];
         }
-        console.log(obj);
         return add;
       };
-      console.log("123", sum(Object.values(this.ListInfo)));
       return sum(Object.values(this.ListInfo));
     },
+    //总金额
     totalmoney() {
       let sum = obj => {
         let add = 0;
         for (let v in obj) {
           add += obj[v][0].price * obj[v][0].quantity;
         }
-        console.log(obj);
         return add;
       };
-      console.log("123", sum(this.entities));
       return sum(this.entities);
     }
   },
   methods: {
+    //带规格选择食物 个数 计算
+    isSelectednum(id,arr){
+      let sum = 0;
+      for(let i = 0;i < arr.length ; i++){
+        if(this.cartInfo[id]&&this.cartInfo[id][arr[i].food_id]){
+          
+          sum += this.cartInfo[id][arr[i].food_id]
+        } 
+      }
+      return sum;
+    },
+    //获取商铺详情..
     getShopInfo() {
-      console.log(this.$route);
       let url =
         "https://elm.cangdu.org/shopping/restaurant/" + this.restaurant_id;
       this.$http({
         method: "get",
         url,
-        query: {
-          id: 1
-        }
       }).then(res => {
-        console.log(res);
         this.geohash = res.data.location.join(",");
         this.restaurant_id = res.data.id;
         this.$set(this, "shopInfo", res.data);
       });
     },
+    // 获取食品列表
     getShopList() {
       let url = "https://elm.cangdu.org/shopping/v2/menu";
       this.$http({
@@ -266,34 +349,82 @@ export default {
           restaurant_id: this.restaurant_id
         }
       }).then(res => {
-        console.log(res);
         this.$set(this, "shopList", res.data);
       });
     },
+    //类选择
     optList(eve, i) {
       this.isopt = i;
-      // console.log(eve);
-      // this.isopt = Math.round(eve.target.scrollTop/65)
-      console.log(this.$refs.leftUl.scrollTop);
       let top = (i - 3) * 65 - this.$refs.leftUl.scrollTop;
       let a = 0;
       let scrollTop = this.$refs.leftUl.scrollTop;
-      let Tiner = setInterval(() => {
+      let Timer = setInterval(() => {
         this.$refs.leftUl.scrollTop = this.$refs.leftUl.scrollTop + top / 10;
         a++;
-        console.log(a, this.$refs.leftUl.scrollTop);
         if (a == 10) {
-          clearInterval(Tiner);
+          clearInterval(Timer);
         }
       }, 50);
+      let b = 1;
+      let c = this.$refs.right_ul_list.scrollTop;
+      let top2 =this.$refs['right_li_list' + i][0].offsetTop - this.$refs.right_ul_list.scrollTop -this.$refs.shopHeader.offsetHeight-this.$refs.shopNav.offsetHeight;
+      let Timer2 = setInterval(() => {
+        this.$refs.right_ul_list.scrollTop =  c + top2 / 30*b;
+        b++;
+        if (b > 30) {
+          clearInterval(Timer2);
+        }
+      }, 20);
     },
+    //右侧滑动
     touchmove($event) {
       let scrollTop = this.$refs.leftUl.scrollTop;
       this.isopt = Math.round(scrollTop / 65 + 3);
+      let i = this.isopt;
+      let b = 1;
+      let c = this.$refs.right_ul_list.scrollTop;
+      let top2 =this.$refs['right_li_list' + i][0].offsetTop - this.$refs.right_ul_list.scrollTop -this.$refs.shopHeader.offsetHeight-this.$refs.shopNav.offsetHeight;
+      let Timer2 = setInterval(() => {
+        this.$refs.right_ul_list.scrollTop =  c + top2 / 30*b;
+        b++;
+        if (b > 30) {
+          clearInterval(Timer2);
+        }
+      }, 20);
     },
-    oscroll(eve) {
-      console.log(eve);
+    //左侧滑动
+    liTouchmove(i){
+      this.isopt=i;
+      this.$refs.leftUl.scrollTop=(i-3)*65;
+      // console.log(this.$refs);
     },
+    //data 储存 购物车 数据..
+    storeInfo(v,va){
+       //left
+      if (this.ListInfo[v.id]) {
+        this.ListInfo[v.id]++;
+      } else {
+        this.$set(this.ListInfo, v.id, 1);
+      }
+
+      //right
+      if (this.cartInfo[v.id]) {
+        if (this.cartInfo[v.id][va.food_id]) {
+          this.cartInfo[v.id][va.food_id]++;
+        } else {
+          this.$set(this.cartInfo[v.id], va.food_id, 1);
+        }
+      } else {
+        this.$set(this.cartInfo, v.id, {});
+        this.$set(this.cartInfo[v.id], va.food_id, 1);
+      }
+      //购物车..
+
+      // 单条数据
+      let entities = this.setEntities(v, va, this.cartInfo[v.id][va.food_id]);
+      this.$set(this.entities, va.food_id, entities);
+    },
+    //普通加
     addMove(eve, v, va) {
       //小球动画...
       let ball = this.$refs.ball.cloneNode(true);
@@ -316,71 +447,44 @@ export default {
       );
 
       //储存..
-      //left
-      if (this.ListInfo[v.id]) {
-        this.ListInfo[v.id]++;
-      } else {
-        this.$set(this.ListInfo, v.id, 1);
-      }
-
-      //right
-      if (this.cartInfo[v.id]) {
-        if (this.cartInfo[v.id][va.food_id]) {
-          this.cartInfo[v.id][va.food_id]++;
-        } else {
-          this.$set(this.cartInfo[v.id], va.food_id, 1);
-        }
-      } else {
-        this.$set(this.cartInfo, v.id, {});
-        this.$set(this.cartInfo[v.id], va.food_id, 1);
-      }
-      //购物车..
-
-      // 单条数据
-      let entities = this.setEntities(v, va, this.cartInfo[v.id][va.food_id]);
-      console.log(entities);
-      this.$set(this.entities, va.food_id, entities);
-      console.log(this.entities, "=====");
-      console.log(this.ListInfo, "aaaaa");
-      console.log(this.cartInfo, "bbbbb");
+     this.storeInfo(v,va);
       //请求..
-      this.getcarts(Object.values(this.entities));
+      // this.getcarts(Object.values(this.entities));
     },
+    //普通减
     LessMove(eve, v, va) {
       this.ListInfo[v.id]--;
       this.cartInfo[v.id][va.food_id]--;
       // 单条数据
       let entities = this.setEntities(v, va, this.cartInfo[v.id][va.food_id]);
-      console.log(entities);
       this.$set(this.entities, va.food_id, entities);
-      console.log(this.entities, "=====");
       //请求..
-      this.getcarts(Object.values(this.entities));
+      // this.getcarts(Object.values(this.entities));
     },
+    //清空购物车..
     clearCarts() {
       this.entities = {};
       this.ListInfo = {};
       this.cartInfo = {};
-      console.log(this.entities, "=====");
-      console.log(this.ListInfo, "aaaaa");
-      console.log(this.cartInfo, "bbbbb");
+      // this.getcarts(Object.values(this.entities));
     },
+    //购物车内 加
     addCarts(v, i) {
       this.ListInfo[v.id]++;
-      console.log(
-        this.ListInfo[v.id],
-        this.cartInfo[v.id][v.sku_id],
-        this.entities[i]
-      );
       this.cartInfo[v.id][v.sku_id]++;
       this.entities[i][0].quantity++;
+      //请求
+      // this.getcarts(Object.values(this.entities));
     },
+    //购物车减..
     lessCarts(v, i) {
       this.ListInfo[v.id]--;
       this.cartInfo[v.id][v.sku_id]--;
       this.entities[i][0].quantity--;
-      console.log(this.ListInfo, this.cartInfo, this.entities);
+      //请求..
+      // this.getcarts(Object.values(this.entities));
     },
+    //加入购物车请求..
     getcarts(entities) {
       let url = "https://elm.cangdu.org/v1/carts/checkout";
       this.$http({
@@ -392,9 +496,11 @@ export default {
           entities
         }
       }).then(res => {
-        console.log(res);
+        this.$set(this,'carts',res.data);//本地储存..
+        this.$store.state.carts = res.data;//vuex 储存...
       });
     },
+    //设置 请求参数...
     setEntities(a, v, num) {
       return [
         {
@@ -411,37 +517,69 @@ export default {
         }
       ];
     },
-    selectedAdd(v,va){
-      // this.selected.specfoods=va.specfoods;
-      this.$set(this.selected,"specfoods",va);
-      this.isSelected=true;
-      this.id=v;
+    //选择规格事件..
+    selectedAdd(v, va) {
+      this.$set(this.selected, "specfoods", va);
+      this.isSelected = true;
+      this.selected.id = v;
+      this.selected.index = 0;
+    },
+    //选择规格中加入购物车..
+    selectedAddCarts(v, va) {
+      //储存..
+      this.storeInfo(v, va);
+      //请求..
+      // this.getcarts(Object.values(this.entities));
+      //隐藏
+      this.isSelected = false;
+    },
+    //去结算...
+    goSettlement(){
+      if(this.total){
+        // 请求
+        this.getcarts(Object.values(this.entities));
+        //跳转..
+        this.$router.push({ name: 'confirmOrder', query: { geohash: this.geohash,shopId:this.restaurant_id }});
+      }
+    },
+    goFoodInfo(va){
+      this.$router.push({
+          name:'shopDetail',
+          query:{
+          image_path: va.image_path,
+          description: va.description,
+          month_sales:va.month_sales,
+          name: va.name,
+          rating:va.rating,
+          rating_count:va.rating_count,
+          satisfy_rate:va.satisfy_rate,
+          shopId: va.restaurant_id
+        }
+      });
     }
   }
 };
 </script>
 
 <style lang="scss">
-html,
-body,
+html,.shop,
+body,.el-container,
 #app {
   width: 100%;
   height: 100%;
 }
-
+// 本页
 .shop {
-  width: 100%;
-  height: 100%;
+  // 布局
   .el-container {
-    width: 100%;
-    height: 100%;
+    //头
     .el-header {
       color: #333;
       text-align: center;
       padding: 0rem;
       .shopinfo {
         overflow: hidden;
-        height: 1rem;
+        height: 1.05rem;
         position: relative;
         font-size: 0.12rem;
         line-height: 0.14rem;
@@ -473,7 +611,100 @@ body,
             font-size: 0.2rem;
             line-height: 0.2rem;
           }
+          // 优惠活动开始
+          .activity {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.08rem;
+            padding-right: 0.234rem;
+            margin-left: 0.12rem;
+            span {
+              color: #fff;
+              margin-right: 0.06rem;
+            }
+            .el-icon-arrow-right {
+              color: #fff;
+              font-size: 0.16rem;
+              font-weight: 300;
+            }
+          }
+
+          // 优惠活动详情
+          .activityDetail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #262626;
+            // background-color: greenyellow;
+            z-index: 2000;
+            padding: 0.29rem;
+            .activityName {
+              text-align: center;
+              height: 1rem;
+              h2 {
+                font-size: 0.2rem;
+                color: #fff;
+                margin-top: 0.16rem;
+              }
+            }
+            .activityMessage {
+              text-align: center;
+              margin-bottom: 0.23rem;
+              .discounts {
+                font-size: 0.14rem;
+                color: #fff;
+                border: 0.01rem solid #fff;
+                padding: 0.05rem 0.09rem;
+                border-radius: 0.1rem;
+              }
+            }
+            ul {
+              margin-top: 0.3rem;
+              li {
+                color: #fff;
+                text-align: left;
+                margin-bottom: 0.05rem;
+                line-height: 0.16rem;
+              }
+            }
+            .notice {
+              text-align: center;
+              margin-top: .5rem;
+              margin-bottom: 0.234rem;
+              span {
+                font-size: 0.14rem;
+                color: #fff;
+                border: 0.01rem solid #fff;
+                
+                padding: 0.05rem 0.09rem;
+                border-radius: 0.1rem;
+              }
+              div {
+                margin-top: 0.3rem;
+                line-height: 0.16rem;
+                font-size: 0.14rem;
+                color: #fff;
+                text-align: left;
+              }
+            }
+            .delect {
+              margin-bottom: 0.2rem;
+              position: fixed;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              .el-icon-circle-close-outline {
+                color: #fff;
+                font-size: 0.5rem;
+                font-weight: 100;
+              }
+            }
+          }
+          // 优惠活动相关结束
         }
+        
         img {
           position: absolute;
           top: 0.1rem;
@@ -510,6 +741,7 @@ body,
         }
       }
       .shop_nav {
+        background-color: #fff;
         width: 100%;
         p {
           display: inline-block;
@@ -554,6 +786,7 @@ body,
       .shop_shop {
         border-top: 0.01rem solid #ededed;
         font-size: 0.14rem;
+        padding-bottom: 0.46rem;
         line-height: 0.64rem;
         text-align: left;
         color: #3190e8;
@@ -572,7 +805,6 @@ body,
               border-left: 0.04rem solid #f5f5f5;
               padding-left: 0.1rem;
               background-color: #f5f5f5;
-              // border-left-color: #fff;
               span {
                 color: #333;
               }
@@ -598,6 +830,7 @@ body,
           }
         }
         .el-main {
+          overflow: hidden;
           transition: all 0.5s;
           .right_warp {
             transition: 1.5s;
@@ -607,14 +840,22 @@ body,
             overflow-y: scroll;
             .right_list {
               h4.main_title {
-                padding: 0.1rem;
+                padding:0.05rem 0.1rem;
                 line-height: 0.3rem;
                 background-color: #f5f5f5;
                 text-align: left;
-                font-size: 0.18rem;
+                font-size: 0.16rem;
+                b{
+                  display: inline-block;
+                  max-width: 30%;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                }
                 span {
                   font-size: 0.12rem;
                   padding-left: 0.1rem;
+                  vertical-align: text-bottom;
                 }
                 .right {
                   float: right;
@@ -628,7 +869,7 @@ body,
                 position: relative;
                 text-align: left;
                 border-bottom: 1px solid #f8f8f8;
-                // height: 1.1rem;
+                background-color: #fff;
                 padding: 0.14rem 0.1rem;
                 img {
                   width: 0.46rem;
@@ -637,10 +878,17 @@ body,
                 }
                 .food_activity {
                   padding-left: 0.5rem;
-                  padding-bottom: 0.15rem;
                   span {
                     font-size: 0.1rem;
                     border-radius: 0.05rem;
+                  }
+                }
+                .food_price{
+                  padding-left: 0.5rem;
+                  color: #f60;
+                  font-size: 0.16rem;
+                  b {
+                    font-size: 0.12rem;
                   }
                 }
                 .description_foodname {
@@ -684,15 +932,25 @@ body,
                 .inShoppingCart {
                   position: absolute;
                   right: 0.2rem;
-                  bottom: 0rem;
+                  bottom: 0.1rem;
                   line-height: 0.24rem;
                   .icon-jian {
-                    line-height: 0.29rem;
+                    line-height: 0.32rem;
                     color: #3190e8;
+                    vertical-align: middle;
+                  }
+                  .el-button{
+                    padding: 0;
+                    font-size: 0.14rem;
+                    border: none;
+                  }
+                  .icon-jian::before{
+                    font-size: 0.2rem;
                     vertical-align: middle;
                   }
                   .icon-icons_add {
                     line-height: 0.29rem;
+                    font-size: 0.18rem;
                     color: #3190e8;
                     vertical-align: middle;
                   }
@@ -708,160 +966,165 @@ body,
                     border: 1px solid #3190e8;
                   }
                 }
-                .shoppingCart {
-                  width: 100%;
-                  position: fixed;
-                  height: 0.46rem;
-                  background-color: #333;
-                  color: #fff;
-                  left: 0rem;
-                  bottom: 0rem;
-                  line-height: 0.46rem;
-                  z-index: 8;
-                  .icon-gouwuche1 {
-                    position: absolute;
-                    left: 0.1rem;
-                    bottom: 0.1rem;
-                    height: 0.48rem;
-                    z-index: 10;
-                    width: 0.48rem;
-                    text-align: center;
-                    font-size: 0.35rem;
-                    color: #fff;
-                    border: 0.04rem solid #555;
-                    border-radius: 0.3rem;
-                    background-color: #3190e8;
-                    .numball {
-                      position: absolute;
-                      left: 0.3rem;
-                      top: -0.1rem;
-                      background: #f00;
-                      width: 0.2rem;
-                      text-align: center;
-                      height: 0.2rem;
-                      font-size: 0.14rem;
-                      border-radius: 0.1rem;
-                      line-height: 0.2rem;
-                    }
-                  }
-                  .amount {
-                    position: absolute;
-                    left: 0rem;
-                    right: 0rem;
-                    bottom: 0rem;
-                    padding-left: 0.8rem;
-                    margin-right: 1.2rem;
-                    font-size: 0.2rem;
-                    height: 100%;
-                    line-height: 0.22rem;
-                    background-color: #555;
-                    z-index: 0;
-                    span {
-                      font-size: 0.12rem;
-                      padding-left: 0.05rem;
-                    }
-                  }
-                  //动画
-                  .slide-fade-enter-active {
-                    transition: all 0.6s;
-                  }
-                  .slide-fade-leave-active {
-                    transition: all 0.6s;
-                  }
-                  .slide-fade-enter,
-                  .slide-fade-leave-to {
-                    transform: translateY(100%);
-                  }
-                  .bottom_cart_list {
-                    position: absolute;
-                    font-size: 0.16rem;
-                    color: #666;
-                    font-weight: 700;
-                    left: 0;
-                    bottom: 0.46rem;
-                    z-index: -10;
-                    transition: 0.6s;
-                    background-color: #fff;
-                    width: 100%;
-                    .cart_title {
-                      font-weight: 400;
-                      font-size: 0.14rem;
-                      padding: 0 0.14rem;
-                      background-color: #eceff1;
-                      .icon-iconfontshanchu2 {
-                        float: right;
-                        font-size: 0.12rem;
-                        padding-left: 0.05rem;
-                      }
-                    }
-                    .cart_list {
-                      line-height: 0.49rem;
-                      padding: 0 0.14rem;
-                      li {
-                        height: 0.49rem;
-                      }
-                      div {
-                        float: right;
-                        width: 30%;
-                        text-align: right;
-                        height: 0.49rem;
-                      }
-                      span {
-                        display: inline-block;
-                        width: 33%;
-                        overflow: hidden;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                      }
-                      .price {
-                        text-align: right;
-                        color: #f60;
-                      }
-                      .icon-jian {
-                        vertical-align: middle;
-                      }
-                      .icon-jian:before {
-                        display: inline-block;
-                        height: 0.16rem;
-                        font-size: 0.19rem;
-                        color: #3190e8;
-                      }
-                      .icon-icons_add {
-                        color: #3190e8;
-                        line-height: 0.49rem;
-                      }
-                    }
-                  }
-                  .settlement {
-                    position: absolute;
-                    right: 0;
-                    bottom: 0;
-                    background-color: #4cd964;
-                    width: 1.2rem;
-                    text-align: center;
-                    font-size: 0.18rem;
-                  }
-                  .shopCartList {
-                    position: absolute;
-                    bottom: 2rem;
-                    left: 0;
-                  }
-                  .bagColor {
-                    background-color: #333;
-                  }
-                  .bagColorh {
-                    background-color: #535356;
-                  }
-                }
               }
-            }
-            li {
-              transition: 1.5s;
             }
           }
         }
       }
+    }
+  }
+  .shoppingCart {
+    width: 100%;
+    position: fixed;
+    height: 0.46rem;
+    background-color: #3d3d3f;
+    color: #fff;
+    left: 0rem;
+    bottom: 0rem;
+    line-height: 0.46rem;
+    z-index: 100;
+    .icon-gouwuche1 {
+      position: absolute;
+      left: 0.1rem;
+      bottom: 0.1rem;
+      height: 0.48rem;
+      z-index: 10;
+      width: 0.48rem;
+      text-align: center;
+      font-size: 0.35rem;
+      color: #fff;
+      border: 0.04rem solid #444;
+      border-radius: 0.3rem;
+      background-color: #3190e8;
+      .numball {
+        position: absolute;
+        left: 0.3rem;
+        top: -0.1rem;
+        background: #f00;
+        width: 0.2rem;
+        text-align: center;
+        height: 0.2rem;
+        font-size: 0.14rem;
+        border-radius: 0.1rem;
+        line-height: 0.2rem;
+      }
+    }
+    .amount {
+      position: absolute;
+      left: 0rem;
+      right: 0rem;
+      bottom: 0rem;
+      padding-left: 0.8rem;
+      margin-right: 1.2rem;
+      font-size: 0.2rem;
+      height: 0.5rem;
+      text-align: left;
+      line-height: 0.22rem;
+      background-color: #333;
+      z-index: 0;
+      span {
+        font-size: 0.12rem;
+        padding-left: 0.05rem;
+      }
+    }
+    //动画
+    .slide-fade-enter-active {
+      transition: all 0.6s;
+    }
+    .slide-fade-leave-active {
+      transition: all 0.6s;
+    }
+    .slide-fade-enter,
+    .slide-fade-leave-to {
+      transform: translateY(100%);
+    }
+    .bottom_cart_list {
+      position: absolute;
+      font-size: 0.16rem;
+      color: #666;
+      font-weight: 700;
+      left: 0;
+      bottom: 0.46rem;
+      z-index: -10;
+      transition: 0.6s;
+      background-color: #fff;
+      width: 100%;
+      ul{
+        max-height: 3rem;
+        overflow-x: hidden;
+        overflow-y: scroll;
+      }
+      .cart_title {
+        text-align: left;
+        font-weight: 400;
+        font-size: 0.14rem;
+        padding: 0 0.14rem;
+        background-color: #eceff1;
+        .icon-iconfontshanchu2 {
+          float: right;
+          font-size: 0.12rem;
+          padding-left: 0.05rem;
+        }
+      }
+      .cart_list {
+        line-height: 0.49rem;
+        padding: 0 0.14rem;
+        li {
+          height: 0.49rem;
+        }
+        div {
+          float: right;
+          width: 30%;
+          text-align: right;
+          height: 0.49rem;
+        }
+        span {
+          display: inline-block;
+          width: 33%;
+          overflow: hidden;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .price {
+          text-align: right;
+          color: #f60;
+        }
+        .icon-jian {
+          vertical-align: middle;
+        }
+        .icon-jian:before {
+          display: inline-block;
+          height: 0.16rem;
+          font-size: 0.19rem;
+          color: #3190e8;
+        }
+        .icon-icons_add {
+          color: #3190e8;
+          line-height: 0.49rem;
+        }
+      }
+    }
+    .settlement {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      background-color: #4cd964;
+      width: 1.2rem;
+      height: 0.5rem;
+      text-align: center;
+      font-size: 0.18rem;
+    }
+    .shopCartList {
+      position: absolute;
+      bottom: 2rem;
+      left: 0;
+    }
+    .bagColor {
+      background-color: #3d3d3f;
+    }
+    .bagColorh {
+      background-color: #535356;//#amount
     }
   }
   .ball {
@@ -885,16 +1148,16 @@ body,
   .selected {
     position: fixed;
     top: 0;
-    left:0;
+    left: 0;
     bottom: 0;
     right: 0;
     z-index: 20;
-    background-color: rgba(255,0,0,0.3);
+    background-color: rgba(0, 0, 0, 0.3);
     .selected_warp {
       position: absolute;
       margin: auto;
       top: 0;
-      left:0;
+      left: 0;
       bottom: 0;
       right: 0;
       width: 2.6rem;
@@ -902,62 +1165,62 @@ body,
       background: #fff;
       border-radius: 0.1rem;
       overflow: hidden;
-      h4{
-        font-size: .16rem;
+      h4 {
+        font-size: 0.16rem;
         color: #222;
         font-weight: 400;
         text-align: center;
-        padding: .12rem;
+        padding: 0.12rem;
       }
-      p{
-        
+      p {
         color: #333;
-        padding: .12rem;
+        padding: 0.12rem;
         text-align: left;
         font-weight: 400;
         font-family: Microsoft Yahei;
       }
       span {
         display: inline-block;
-        padding:0.05rem 0.1rem;
-        font-size: .12rem;
-        border: .01rem solid #ddd;
-        border-radius: .05rem;
-        margin:0 .08rem;
+        padding: 0.05rem 0.1rem;
+        font-size: 0.12rem;
+        border: 0.01rem solid #ddd;
+        border-radius: 0.05rem;
+        margin: 0 0.08rem;
       }
       .isSelected {
-        border-color:#3199e8;
-        color:#3199e8;
+        border-color: #3199e8;
+        color: #3199e8;
       }
       footer {
         display: flex;
-        justify-content:space-between;
+        justify-content: space-between;
         width: 100%;
         position: absolute;
         left: 0;
         bottom: 0;
         height: 0.5rem;
         line-height: 0.5rem;
-        font-size: .12rem;
+        font-size: 0.12rem;
         color: #222;
         background-color: #f9f9f9;
         color: #ff6000;
-        b{
+        b {
           margin-left: 0.2rem;
-          font-size: .12rem;
+          font-size: 0.12rem;
           color: #ff6000;
-          i{
-            font-size: .2rem;
+          i {
+            font-size: 0.2rem;
           }
         }
         button {
           margin-right: 0.16rem;
           margin-top: 0.1rem;
-          width: 1.0rem;
+          width: 1rem;
           height: 0.3rem;
           background-color: #3199e8;
-          border-radius: .03rem;
-          font-size: .12rem;
+          border: none;
+          border-radius: 0.03rem;
+          font-size: 0.12rem;
           color: #fff;
           text-align: center;
           line-height: 0.3rem;
@@ -982,5 +1245,29 @@ body,
     padding-right: 0.1rem;
     margin-bottom: 0;
   }
+}
+.el-message {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: 3.2rem;
+  min-width: 1.2rem;
+  background-color: #000;
+  color: #fff;
+}
+.el-popover__title {
+  float: left;
+  color: #fff;
+  padding-right:0.05rem;
+}
+.el-popover{
+  padding:0.1rem 0.1rem 0;
+  background-color: #39373a;
+  opacity: .9;
+  color: #fff;
+}
+.el-popper[x-placement^=bottom] .popper__arrow::after{
+  // background-color: #39373a;
+  border-bottom-color:#39373a;
 }
 </style>
