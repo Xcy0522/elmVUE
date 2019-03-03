@@ -1,7 +1,7 @@
 <template>
   <div class="questionDetail">
      <headCom :head="head"></headCom>
-     <section>
+     <section class="questionDetail_cont">
         {{ content}}
      </section>
   </div>
@@ -32,7 +32,7 @@ export default {
 
 <style lang="scss">
    .questionDetail {
-       section {
+       section.questionDetail_cont {
            padding-top: .45rem;
        }
    }

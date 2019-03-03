@@ -284,7 +284,7 @@ export default {
 </script>
 
 <style lang="scss">
-.nav_warp {
+.food_nav.nav_warp {
   height:100%;
   background-color:rgba(0,0,0,0.3);
 }
@@ -293,6 +293,8 @@ export default {
   top: 0.45rem;
   z-index: 10;
   width: 100%;
+  height:0.4rem;
+  background-color: #fff;
   line-height: 0.235rem;
   overflow: hidden;
   .nav_title_warp{

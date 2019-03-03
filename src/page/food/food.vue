@@ -100,6 +100,7 @@ export default {
 .profile {
   padding-top: 0.84rem;
   .content {
+    margin-top: 0;
     background-color: #fff;
     .store_list {
       font-size: 0.15rem;

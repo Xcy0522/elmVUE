@@ -201,7 +201,7 @@ export default new Router({
             name: 'shop',
             component: Shop,
             children: [{
-                path: '/shopDetail',
+                path: 'shopDetail',
                 name: 'shopDetail',
                 component: ShopDetail,
             }]

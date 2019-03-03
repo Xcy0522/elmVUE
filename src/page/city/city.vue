@@ -52,25 +52,8 @@ export default {
     this.$store.dispatch("getCity",()=> {
        this.head.cont = "<span>" + this.$store.state.city.name + "</span>";
     });
-    
-    // copy的第二中方法试用
-    // this.$store.dispatch("getCity",this);
-    // 写在本页面的方法调用
-    // this.getCityDetails();
   },
   methods: {
-    // 写在本页面的请求
-    // getCityDetails() {
-    //   const urlCityMessage =
-    //     " https://elm.cangdu.org/v1/cities/" + this.$route.params.id;
-    //   this.$http({
-    //     method: "get",
-    //     url: urlCityMessage
-    //   }).then(res => {
-    //     console.log(res);
-    //     this.head.cont = "<span>" + res.data.name + "</span>";
-    //   });
-    // },
 
     submit() {
       this.issubmit = true;
@@ -102,9 +85,6 @@ export default {
       // 把cityArr数组的第一个值作为对象的key值,去重
       this.cityArr = [name,address,geohash];
       this.$store.state.cityHis[name] = this.cityArr;
-
-      // console.log(this.$store.state.cityHis);
-      // console.log(this.cityArr);
 
       this.$store.state.city = {name:name,address:address,geohash:geohash}  
       

@@ -1,7 +1,7 @@
 <template>
   <div class="service">
     <headCom :head="head"></headCom>
-    <section>
+    <section class="download_warp">
       <div class="img">
         <img :src="elm" alt>
       </div>
@@ -43,7 +43,7 @@ export default {
 </script>
 
 <style lang="scss">
-section {
+section.download_warp {
   padding-top: 0.45rem;
   text-align: center;
   .img {

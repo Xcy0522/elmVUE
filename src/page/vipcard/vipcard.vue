@@ -87,7 +87,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .vipcard {
   .content {
     padding-top: 0.45rem;

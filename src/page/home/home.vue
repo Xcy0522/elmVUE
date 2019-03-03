@@ -66,7 +66,6 @@ export default {
     };
   },
   created() {
-    // console.log(localStorage.getItem("username"));
     this.getLocationCity("guess", "guessCity");
     this.getLocationCity("hot", "hotCity");
     this.getLocationCity("group", "groupCity");
@@ -85,7 +84,7 @@ export default {
         }
       }).then(response => {
         //这里使用了ES6的语法
-        console.log(response.data); //请求成功返回的数据
+        // console.log(response.data); //请求成功返回的数据
         this.$set(this, container, response.data);
       });
     },
@@ -99,10 +98,6 @@ export default {
 </script>
 
 <style lang="scss">
-.headCom {
-  position: fixed;
-  top: 0;
-}
 .locationCity {
   height: 0.75rem;
   margin-top: 0.5rem;

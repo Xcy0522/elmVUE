@@ -111,7 +111,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .forget {
   form {
     padding-top: 0.5rem;

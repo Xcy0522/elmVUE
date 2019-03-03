@@ -8,7 +8,7 @@
     <section class="detailCounter">
       <p class="name">{{$route.query.name}}</p>
       <div class="star">
-        <span>评分</span>
+        <span>评分</span> 
          <el-rate
             v-model="star"
             disabled
@@ -56,7 +56,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .shopDetail {
   position: fixed;
   top: 0;

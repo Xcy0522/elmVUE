@@ -1,6 +1,6 @@
 <template>
   <div class="forget">
-    <div class="top">
+    <div class="forget_top">
       <headCom :head="head"></headCom>
       <header>
         <div class="headerBotton">
@@ -137,7 +137,7 @@ export default {
 </script>
 
 <style lang="scss">
-.top {
+.forget_top {
   header {
     height: 0.9rem;
     background-color: #3190e8;

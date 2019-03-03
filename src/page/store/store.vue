@@ -1,4 +1,3 @@
-<template>
   <div class="forget">
     <headCom :head="head"></headCom>
      {{msg}}
@@ -31,7 +30,7 @@ export default {
 } 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 h1 {
   padding-top:.45rem; 
 }

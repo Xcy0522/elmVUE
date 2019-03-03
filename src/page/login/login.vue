@@ -1,5 +1,5 @@
 <template>
-  <div class="warp">
+  <div class="login_warp">
     <headCom :head="head"></headCom>
     <form>
       <!-- 账号 -->
@@ -120,7 +120,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.warp {
+.login_warp {
   form {
     margin-top: 0.55rem;
     background-color: #fff;

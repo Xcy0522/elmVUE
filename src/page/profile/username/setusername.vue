@@ -57,7 +57,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .setname {
   margin: 0 0.093rem;
   padding-top: 0.5rem;

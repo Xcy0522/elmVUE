@@ -2,7 +2,7 @@
   <div class="wrap_top">
     <headCom :head="head"></headCom>
     <!-- 在线客服 -->
-    <div class="content">
+    <div class="service_content">
       <div class="left">
         <p>
           <span class="iconfont icon-face"></span>
@@ -77,7 +77,7 @@ export default {
 </script>
 
 <style lang="scss">
-.content {
+.service_content {
   margin-top: 0.5rem;
   height: 1rem;
   border-bottom: 0.01rem solid #f5f5f5;
@@ -97,7 +97,6 @@ export default {
     height: 100%;
     float: right;
   }
-}
 .problem {
   height: 0.71rem;
   line-height: 0.71rem;
@@ -114,18 +113,11 @@ export default {
       color: #666;
       background: white;
       li {
-        // height: 0.47rem;
         border-bottom: 0.01rem solid #f5f5f5;
         padding: 0 0.15rem;
       }
     }
-
-    // span {
-    //   float: right;
-    //   font-size: 0.4rem;
-    //   font-weight: 600;
-    //   color: rgb(153, 153, 153);
-    // }
   }
+}
 }
 </style>

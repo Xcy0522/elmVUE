@@ -67,7 +67,7 @@ export default {
         },
         loop: true
       },
-      geohash:localStorage.getItem('geohash'),
+      geohash: localStorage.getItem("geohash")
     };
   },
   created() {
@@ -84,14 +84,13 @@ export default {
   },
   computed: {
     swiper() {
-      return this.$refs.mySwiper&&this.$refs.mySwiper.swiper;
+      return this.$refs.mySwiper && this.$refs.mySwiper.swiper;
     }
   },
   mounted() {
     // current swiper instance
     // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
-    console.log("this is current swiper instance object", this.swiper);
-    this.swiper&&this.swiper.slideTo(3, 1000, false);
+    this.swiper && this.swiper.slideTo(3, 1000, false);
   },
   methods: {
     shoop() {
@@ -102,7 +101,6 @@ export default {
         url: url,
         withCredentials: true
       }).then(res => {
-        console.log("2222", res);
         this.title_on = res.data;
       });
     },
@@ -116,76 +114,76 @@ export default {
 };
 </script>
 
-<style>
-
+<style lang="scss">
 .msite {
   width: 100%;
   background: #e4e4e4;
-}
-.scroll_on {
-  width: 100%;
-  height: 1.85rem;
-  margin-top: 0.5rem;
-  text-align: center;
-  background: white;
-}
-.scroll_left {
-  display: flex;
-  flex-wrap: wrap;
-  /* border:1px solid black; */
-}
-.scroll_left li {
-  width: 25%;
-  margin-top: 0.1rem;
-  margin-bottom: 0.1rem;
-}
-.scroll_right {
-  display: flex;
-  flex-wrap: wrap;
-}
-.scroll_right li {
-  width: 25%;
-  margin-top: 0.1rem;
-  margin-bottom: 0.1rem;
-}
-/* .scroll_on */
-.scroll_on img {
-  width: 0.45rem;
-  height: 0.45rem;
-}
-.scroll_on p {
-  margin-top: 0.05rem;
-  color: grey;
-}
-.swiper-container-horizontal .swiper-pagination {
-  bottom: 0.01rem;
-}
-/* 附近商家 */
-.merchant {
-  width: 100%;
-  margin-top: 0.06rem;
-  height: 100%;
-  background: white;
-}
-.merchant_title {
-  height: 0.4rem;
 
-  line-height: 0.4rem;
-  color: grey;
-  background: white;
-}
-.merchant_title span {
-  margin-left: 0.15rem;
-}
-.merchant_title span {
-  font-size: 0.18rem;
-  font-weight: bold;
-}
-.merchant_list li {
-  height: 0.7rem;
-  margin: 0 0.1rem;
-  padding: 0.15rem 0;
-  /* margin: 0.15rem 0; */
-  border-bottom: 0.01rem solid #e4e4e4;
+  .scroll_on {
+    width: 100%;
+    height: 1.85rem;
+    margin-top: 0.5rem;
+    text-align: center;
+    background: white;
+  }
+  .scroll_left {
+    display: flex;
+    flex-wrap: wrap;
+    /* border:1px solid black; */
+  }
+  .scroll_left li {
+    width: 25%;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+  }
+  .scroll_right {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .scroll_right li {
+    width: 25%;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+  }
+  /* .scroll_on */
+  .scroll_on img {
+    width: 0.45rem;
+    height: 0.45rem;
+  }
+  .scroll_on p {
+    margin-top: 0.05rem;
+    color: grey;
+  }
+  .swiper-container-horizontal .swiper-pagination {
+    bottom: 0.01rem;
+  }
+  /* 附近商家 */
+  .merchant {
+    width: 100%;
+    margin-top: 0.06rem;
+    height: 100%;
+    background: white;
+  }
+  .merchant_title {
+    height: 0.4rem;
+
+    line-height: 0.4rem;
+    color: grey;
+    background: white;
+  }
+  .merchant_title span {
+    margin-left: 0.15rem;
+  }
+  .merchant_title span {
+    font-size: 0.18rem;
+    font-weight: bold;
+  }
+  .merchant_list li {
+    height: 0.7rem;
+    margin: 0 0.1rem;
+    padding: 0.15rem 0;
+    /* margin: 0.15rem 0; */
+    border-bottom: 0.01rem solid #e4e4e4;
+  }
 }
 </style>

@@ -6,7 +6,7 @@
       <li v-for="(con, index) in content_on" :key="index">
         <!-- 引路由 -->
         <div @click="gotoApprance(con.id,con.latitude,con.longitude)">
-          <img :src="'//elm.cangdu.org/img/'+con.image_path" alt>
+          <img :src="'http://elm.cangdu.org/img/'+con.image_path" alt>
           <div class="brand">
             <span class="brand_on">品牌</span>
             <span class="brand_t">{{con.name}}</span>
@@ -87,7 +87,8 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss">
+.merchant {
 /* 商家列表css样式 */
 .merchant_list li img {
   vertical-align: top;
@@ -163,5 +164,6 @@ export default {
 }
 .bot_right {
   float: right;
+}
 }
 </style>

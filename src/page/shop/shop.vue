@@ -1246,7 +1246,7 @@ body,.el-container,
     margin-bottom: 0;
   }
 }
-.el-message {
+.el-popover+.el-message {
   left: 50%;
   top: 50%;
   transform: translate(-50%,-50%);

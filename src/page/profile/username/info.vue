@@ -94,7 +94,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .info {
   .top {
     padding-top: 0.45rem;

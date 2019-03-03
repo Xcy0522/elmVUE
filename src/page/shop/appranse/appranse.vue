@@ -135,7 +135,7 @@ export default {
     },
 
     // 页面下面个人评价信息
-    getEvaluateMessage() {
+    getEvaluateMessage() { 
       const url =
         "https://elm.cangdu.org/ugc/v2/restaurants/" +
         this.restaurant_id +
