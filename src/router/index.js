@@ -45,6 +45,9 @@ import Payment from '@/page/confirmOrder/children/payment'
 
 import Shop from '@/page/shop/shop'
 import ShopDetail from '@/page/shop/shopDetail'
+import ShopDetaila from '@/page/shop/foodDetail1'
+import ShopSafe from '@/page/shop/shopSafe'
+
 
 import Service from '@/page/service/service'
 import QuestionDetail from '@/page/service/questionDetail'
@@ -207,6 +210,15 @@ export default new Router({
             }]
         },
         {
+            path: '/shopDetaila',
+            name: 'shopDetaila',
+            component: ShopDetaila,
+        },
+        {
+            path: '/shopDetaila/shopSafe',
+            name: 'shopSafe',
+            component: ShopSafe,
+        }, {
             path: '/points',
             name: 'points',
             component: Points
