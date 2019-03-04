@@ -61,7 +61,7 @@
             <!-- 优惠活动详情结束 -->
           </div>
           <a href="javascript:history.back(-1)" class="iconfont icon-zuo"></a>
-          <a href="#/shop/shopDetail" class="iconfont icon-you"></a>
+          <router-link :to="{name:'shopDetaila',params:{id:restaurant_id}}" class="iconfont icon-you"></router-link>
         </div>
         <!-- 导航 -->
         <nav class="shop_nav" style="height:0.5rem" ref="shopNav">
@@ -1246,7 +1246,7 @@ body,.el-container,
     margin-bottom: 0;
   }
 }
-.el-popover+.el-message {
+.el-popover~.el-message {
   left: 50%;
   top: 50%;
   transform: translate(-50%,-50%);
