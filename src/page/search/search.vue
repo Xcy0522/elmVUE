@@ -45,7 +45,7 @@ export default {
     return {
       head: {
         left:
-          "<a href='javascript:history.back(-1)'><span class='iconfont icon-sousuo'></span></a>",
+          "<a href='#/search'><span class='iconfont icon-sousuo'></span></a>",
         cont: "<p>搜索</p>",
         right: ""
       },

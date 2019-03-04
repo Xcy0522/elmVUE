@@ -1,3 +1,4 @@
+ <template>
   <div class="forget">
     <headCom :head="head"></headCom>
      {{msg}}
