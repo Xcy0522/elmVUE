@@ -7,7 +7,7 @@
         <p>食品安全监督公示</p>
       </div>
       <div class="con_on">
-        <p>监督检查结果: {{}}</p>
+        <p>监督检查结果: {{$store.state.shopInfo.rating&&$store.state.shopInfo.rating||4.7}}</p>
         <p class="p_bot">检查日期:</p>
       </div>
     </div>
@@ -49,11 +49,16 @@ export default {
         right: "<a href='/'></a>"
       }
     };
+  },
+  methods: {
+    food_list() {
+        console.log(this.$store.state.shopInfo);
+    }
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .top_on,
 .con_on {
   background: white;
@@ -112,7 +117,7 @@ export default {
       font-size: 0.17rem;
     }
     .bot_bottom {
-        line-height: 0.33rem;
+      line-height: 0.33rem;
       p {
         font-size: 0.1rem;
         color: #333;

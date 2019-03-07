@@ -28,7 +28,7 @@
       <section class="right">
         <p class="right_top">
           {{con.deliver_time}}&nbsp;|&nbsp;预计
-          <time>{{}}</time>
+          <time>{{new Date().toLocaleTimeString()}}</time>
         </p>
         <p class="right_bottom">蜂鸟专送</p>
       </section>
@@ -52,35 +52,21 @@
         <span>效果演示</span>
       </header>
       <ul class="form_on">
-        <li>
-          <p class="form_left">腿aa-atf</p>
+        <li v-for="(v,k,i) in cartsInfo" :key="i">
+          <p class="form_left">{{v[0].name}}</p>
           <div class="form_right">
-            <span class="text_on">x 0</span>
-            <span>￥ 21</span>
-          </div>
-        </li>
-        <li>
-          <p class="form_left">的味道切尔奇二群翁</p>
-          <div class="form_right">
-            <span class="text_on">x 0</span>
-            <span>￥ 20</span>
-          </div>
-        </li>
-        <li>
-          <p class="form_left">latiao</p>
-          <div class="form_right">
-            <span class="text_on">x 0</span>
-            <span>￥ 20</span>
+            <span class="text_on">{{v[0].quantity}}</span>
+            <span>￥ {{v[0].price*v[0].quantity}}</span>
           </div>
         </li>
       </ul>
       <section class="box">
-        <p>餐盒</p>
+        <p>餐盒{{packingFee()}}</p>
         <span>¥ 18257</span>
       </section>
       <section class="charge">
         <p>配送费</p>
-        <span>¥ 4</span>
+        <span>¥ <i></i></span>
       </section>
       <section class="money">
         <p>订单 ¥18281</p>
@@ -110,7 +96,7 @@
     </section>
     <section class="bottom_bot">
       <p class="bottom_left">待支付 ¥18281</p>
-      <p class="bottom_right">确认下单</p>
+      <p class="bottom_right" @click="confirmOrder">确认下单</p>
     </section>
 
     <!-- 蒙版 -->
@@ -145,15 +131,16 @@ export default {
         cont: "确认订单",
         right: "<a href='#/login'>登录/注册</a>"
       },
-      username: localStorage.getItem("username")
-     
+      username: localStorage.getItem("username"),
+      cartsInfo:this.$store.state.entities
     };
   },
   created() {
     this.site_on();
     if (this.username) {
       this.head.right = " <a href='#/profile'><span class='iconfont'>&#xe60e;</span></a>"
-    }
+    };
+    console.log(this.$store.state.entities,'=-----');
   },
   methods: {
     site_on() {
@@ -164,7 +151,7 @@ export default {
         method: "get",
         url: url
       }).then(res => {
-        console.log(res);
+        // console.log(res);
         this.con = res.data;
       });
     },
@@ -179,12 +166,45 @@ export default {
       }else{
         return '#ff5722';
       }
+    },
+    //确认下单...
+    confirmOrder(){
+      console.log(this.$route,'bcbc');
+      console.log(this.$store.state.content_on,'aa')
+      // this.$router.push({name:'payment'});
+    },
+    //下单请求...
+    getOrder(){
+      const url = "https://elm.cangdu.org/v1/users/:user_id/carts/:cart_id/orders";
+      this.$http({
+        method: "post",
+        url: url,
+        data:{
+          user_id:this.$store.state.content_on.user_id, //用户ID
+          cart_id:this.$store.state.content_on.user_id.city_id,//购物车ID
+          address_id :this.$store.state.content_on.id,//收货地址ID
+          restaurant_id:this.$store.state.restaurant_id,// 	餐馆ID
+          geohash:this.$store.state.geohash,//经纬度
+          description:this.$store.state.description , //备注
+          entities:Object.keys(this.$store.state.entities),//[{attrs:[],extra:{},id:食品id,name:食品名称,packing_fee:打包费,price:价格,quantity:数量,sku_id:规格id,specs:规格,stock:存量,}]
+        }
+      }).then(res => {
+        console.log(res);
+        // this.con = res.data;
+      });
+    },
+    packingFee(){
+      let num = 0;
+      for(let v in this.cartsInfo){
+        num += this.cartsInfo[v][0].packing_fee;
+      }
+      return num;
     }
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .site {
    background: #fff url(../../images/caixian.png) repeat-x 0 1.26rem;
   background-size: 0.2rem 0.04rem;

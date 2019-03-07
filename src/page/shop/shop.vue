@@ -235,7 +235,6 @@
         </el-container>
       </el-main>
     </el-container>
-    
   </div>
 </template>
 <script>
@@ -285,6 +284,15 @@ export default {
     this.getShopInfo();//获取商铺信息
     this.getShopList();//获取食品列表
     this.getcarts();// 加入购物车
+    if(this.$store.state.historyCarts[this.$route.query.id]){
+      console.log(this.$store.state.historyCarts,this.shopInfo.id,"ccc");
+      // this.$set(this,'cartInfo',this.$store.state.historyCarts[this.shopInfo.id].cartInfo);
+      // this.$set(this,'ListInfo',this.$store.state.historyCarts[this.shopInfo.id].ListInfo);
+      // this.$set(this,'entities',this.$store.state.historyCarts[this.shopInfo.id].entities);
+      this.cartInfo= this.$store.state.historyCarts[this.$route.query.id].cartInfo; //选中食物记录
+      this.ListInfo= this.$store.state.historyCarts[this.$route.query.id].ListInfo; //类中选中食物总个数
+      this.entities= this.$store.state.historyCarts[this.$route.query.id].entities; //请求参数entities 详情
+    }
   },
   components: {
     Appranse
@@ -350,6 +358,7 @@ export default {
         }
       }).then(res => {
         this.$set(this, "shopList", res.data);
+        this.$set(this.$store.state, "shopInfo", res.data);
       });
     },
     //类选择
@@ -496,6 +505,7 @@ export default {
           entities
         }
       }).then(res => {
+        console.log(res);
         this.$set(this,'carts',res.data);//本地储存..
         this.$store.state.carts = res.data;//vuex 储存...
       });
@@ -540,6 +550,13 @@ export default {
         this.getcarts(Object.values(this.entities));
         //跳转..
         this.$router.push({ name: 'confirmOrder', query: { geohash: this.geohash,shopId:this.restaurant_id }});
+        this.$store.state.historyCarts[this.shopInfo.id]={};
+        this.$store.state.historyCarts[this.shopInfo.id].cartInfo = this.cartInfo; //选中食物记录
+        this.$store.state.historyCarts[this.shopInfo.id].ListInfo = this.ListInfo; //类中选中食物总个数
+        this.$store.state.historyCarts[this.shopInfo.id].entities = this.entities; //请求参数entities 详情
+        this.$store.state.cartInfo = this.cartInfo; //选中食物记录
+        this.$store.state.ListInfo = this.ListInfo; //类中选中食物总个数
+        this.$store.state.entities = this.entities; //请求参数entities 详情
       }
     },
     goFoodInfo(va){
@@ -557,17 +574,19 @@ export default {
         }
       });
     }
+  },
+  beforeDestroy(){
+    this.$store.state.historyCarts[this.shopInfo.id]={};
+    this.$store.state.historyCarts[this.shopInfo.id].cartInfo = this.cartInfo; //选中食物记录
+    this.$store.state.historyCarts[this.shopInfo.id].ListInfo = this.ListInfo; //类中选中食物总个数
+    this.$store.state.historyCarts[this.shopInfo.id].entities = this.entities; //请求参数entities 详情
   }
 };
 </script>
 
+
 <style lang="scss">
-html,.shop,
-body,.el-container,
-#app {
-  width: 100%;
-  height: 100%;
-}
+
 // 本页
 .shop {
   // 布局
@@ -1246,7 +1265,7 @@ body,.el-container,
     margin-bottom: 0;
   }
 }
-.el-popover~.el-message {
+.el-popover~div.el-message,#app~div.el-message,div.el-message {
   left: 50%;
   top: 50%;
   transform: translate(-50%,-50%);
@@ -1269,5 +1288,11 @@ body,.el-container,
 .el-popper[x-placement^=bottom] .popper__arrow::after{
   // background-color: #39373a;
   border-bottom-color:#39373a;
+}
+html,.shop,
+body,.el-container,
+#app {
+  width: 100%;
+  height: 100%;
 }
 </style>

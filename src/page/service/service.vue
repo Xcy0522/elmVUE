@@ -21,8 +21,8 @@
     <div class="vip">
       <section>       
           <ul>
-            <li v-for="(v,i) in Object.values(con).length/2" :key="i"  >
-              <div style="display: inline-block" v-if='(Object.values(con)[2*(v-1)-1]!=Object.values(con)[2*v-1])' @touchend="gotoDetail(Object.values(con)[2*v])">
+            <li v-for="(v,i) in Object.values(con).length/2" :key="i"   v-show='(Object.values(con)[2*(v-1)-1]!=Object.values(con)[2*v-1])' @touchend="gotoDetail(Object.values(con)[2*v])">
+              <div style="display: inline-block">
                 {{Object.values(con)[2*v-1]}}                
               </div>
               <span class="iconfont icon-you"></span>
@@ -76,7 +76,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .service_content {
   margin-top: 0.5rem;
   height: 1rem;
@@ -97,6 +97,7 @@ export default {
     height: 100%;
     float: right;
   }
+}
 .problem {
   height: 0.71rem;
   line-height: 0.71rem;
@@ -119,5 +120,5 @@ export default {
     }
   }
 }
-}
+
 </style>

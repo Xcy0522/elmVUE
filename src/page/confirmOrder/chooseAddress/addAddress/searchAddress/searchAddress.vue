@@ -63,10 +63,11 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .wrap {
 //   height: 7rem;
   background: white;
+  padding-bottom: 3.5rem;
   .wrap_on {
     margin-top: 0.5rem;
     .search_on {
@@ -105,6 +106,7 @@ export default {
       li {
         padding: 0.15rem 0;
         border-bottom: 0.01rem solid #f5f5f5;
+        line-height: 0.3rem;
         h4 {
           font-size: 0.2rem;
         }

@@ -96,7 +96,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .profile {
   padding-top: 0.84rem;
   .content {

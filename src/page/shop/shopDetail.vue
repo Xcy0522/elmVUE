@@ -46,8 +46,8 @@ export default {
     };
   },
   created() {
-    console.log(this.$route.query)
-    console.log(this.star)
+  //   console.log(this.$route.query)
+  //   console.log(this.star)
   },
   methods: {
     

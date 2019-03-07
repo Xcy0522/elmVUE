@@ -33,7 +33,7 @@
     <!-- 备注留言 -->
     <section class="bottom_con">
       <header>其他备注</header>
-      <textarea id="" cols="40" rows="7" placeholder="请输入备注内容(可不填)"></textarea>
+      <textarea id="" cols="40" rows="7" placeholder="请输入备注内容(可不填)" v-model="remarks"></textarea>
     </section>
     <section class="but_but">
       <button @click="on()">确定</button>
@@ -59,7 +59,8 @@ export default {
           "<a href='javascript:history.back(-1)'><span class='iconfont icon-zuo'></span></a>",
         cont: "订单备注",
         right: ""
-      }
+      },
+      remarks:'',
     };
   },
   created() {
@@ -73,17 +74,50 @@ export default {
         method: "get",
         url: url
       }).then(res => {
-        console.log(res);
+        // console.log(res);
       });
     },
     on() {
+      let aa = this.totalPrice();
+      this.$store.state.description = aa;
       this.$router.push({name: 'confirmOrder'});
+    },
+    totalPrice (){
+      var totalP = '';
+      if(this.select==1){
+        totalP+='不要辣,';
+      }
+      if(this.select==2){
+        totalP+='少要辣,';
+      }
+      if(this.select==3){
+        totalP+='多要辣,';
+      }
+      if(this.select2){
+        totalP+='不要香菜,';
+      }
+      if(this.select3){
+        totalP+='不要洋葱,';
+      }
+      if(this.select4){
+        totalP+='不要醋,';
+      }
+      if(this.select5){
+        totalP+='多点葱花-';
+      }
+      if(this.select6){
+        totalP+='去冰-';
+      }else{
+        totalP+='少冰-';
+      }
+      totalP+=this.remarks
+      return totalP;
     }
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .remark {
   margin-top: 0.6rem;
   padding: 0 0.15rem 0.2rem;

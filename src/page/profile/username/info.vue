@@ -82,7 +82,7 @@ export default {
         method: "get",
         url: exitUrl
       }).then(res => {
-        console.log(res);
+        // console.log(res);
       });
     },
     exit2(){

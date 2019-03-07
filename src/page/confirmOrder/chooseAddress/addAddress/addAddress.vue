@@ -112,12 +112,12 @@ export default {
   },
 
   created() {
-    console.log(this.$route);
+    // console.log(this.$route);
     this.home = this.$store.state.location;
     this.id = localStorage.getItem("userId");
     //
     this.geohash = localStorage.getItem("geohash");
-    console.log(this.geohash);
+    // console.log(this.geohash);
   },
   methods: {
     on_(e) {
@@ -159,7 +159,7 @@ export default {
         this.text_on = " 请登录 " ;   
       } else {
         
-        console.log(this.user_id,"?????????");
+        // console.log(this.user_id,"?????????");
         const url = "https://elm.cangdu.org/v1/users/" + this.id + "/addresses";
         this.$http({
           method: "post",
@@ -177,7 +177,7 @@ export default {
             tag_type: this.tag_type //标签类型
           }
         }).then(res => {
-          console.log(res, "++++?????_____");
+          // console.log(res, "++++?????_____");
           this.$router.push({ name: "chooseAddress" });
 
         });
@@ -190,7 +190,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .top_on {
   padding: 0 0.15rem;
   margin-top: 0.5rem;

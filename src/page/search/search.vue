@@ -107,6 +107,9 @@ export default {
 </script>
 <style lang="scss">
 .search {
+  section.questionDetail_cont {
+           padding-top: .45rem;
+  }
   .form {
     padding: 0.57rem 0.12rem 0.12rem;
     background-color: #fff;

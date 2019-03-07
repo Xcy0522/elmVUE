@@ -113,7 +113,7 @@ export default {
         method: "get",
         url: url
       }).then(res => {
-        console.log("评价分数", res);
+        // console.log("评价分数", res);
         this.evaluateScore = res.data;
         this.serviceValue = Number(res.data.service_score.toFixed(1));
         this.foodValue = Number(res.data.food_score.toFixed(1));
@@ -129,7 +129,7 @@ export default {
         method: "get",
         url: url
       }).then(res => {
-        console.log("评价分类", res);
+        // console.log("评价分类", res);
         this.evaluateKind = res.data;
       });
     },
@@ -148,7 +148,7 @@ export default {
           limit: "10"
         }
       }).then(res => {
-        console.log("个人评价信息", res);
+        // console.log("个人评价信息", res);
         this.evaluateMessage = res.data;
       });
     }
