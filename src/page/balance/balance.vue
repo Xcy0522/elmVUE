@@ -57,7 +57,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .balance {
   .title_on {
     padding: 0.05rem;

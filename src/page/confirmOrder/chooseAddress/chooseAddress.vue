@@ -3,8 +3,8 @@
     <!-- 导航条 -->
     <headCom :head="head"></headCom>
     <section class="top_on_on">
-      <ul class="con_on">
-        <li v-for="(con, index) in con" :key="index" @click="userInfo(con, index)">
+      <ul class="con_on" v-if="con.length!=0">
+        <li v-for="(con, index) in con" :key="index" @click="userInfo(con, index)" >
           <span class="iconfont icon-dui1 on" :class="{img_on:select==index}"></span>
           <div class="message">
             <header>
@@ -17,7 +17,6 @@
               <p>{{con.address}}</p>
             </div>
           </div>
-          <!-- <button class="onClick" @click="clear()">X</button> -->
         </li>
       </ul>
       <!-- a链接, 点击添加 -->
@@ -51,7 +50,7 @@ export default {
     };
   },
   created() {
-    console.log(this.$route);
+    // console.log(this.$route);
     if(localStorage.getItem("username")) {
        this.head.right = " <a href='#/profile'><span class='iconfont'>&#xe60e;</span></a>"
     }
@@ -69,7 +68,7 @@ export default {
     },
     end_on() {
     //  " https://elm.cangdu.org/v1/users/:user_id/addresses"
-     console.log(this.user_id)
+    //  console.log(this.user_id)
       const url = "https://elm.cangdu.org/v1/users/" + this.user_id + "/addresses";
       this.$http({
         method: "get",
@@ -98,12 +97,9 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .top_on_on {
   padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  // height: 8rem;
-  background: white;
   .con_on {
     line-height: 0.3rem;
 

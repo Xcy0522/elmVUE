@@ -3,9 +3,6 @@
      <div>
          <img :src="buffer" alt="">
      </div>
-
-
-
   </div>
 </template>
 
@@ -28,7 +25,7 @@ export default {
 } 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .buffer {
     div {
         width: 1rem;

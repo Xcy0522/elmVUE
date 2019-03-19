@@ -36,7 +36,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .invoice_on {
   margin-top: 0.6rem;
   padding: 0 0.15rem;

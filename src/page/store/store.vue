@@ -32,7 +32,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h1 {
+h1,.forget {
   padding-top:.45rem; 
+  line-height: 0.4rem;
+  text-align: center;
 }
 </style>

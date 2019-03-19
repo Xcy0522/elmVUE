@@ -114,7 +114,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" >
 .msite {
   width: 100%;
   background: #e4e4e4;

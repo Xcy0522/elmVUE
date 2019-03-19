@@ -65,7 +65,7 @@ export default {
           offset: "0"
         }
       }).then(res => {
-        console.log(res);
+        // console.log(res);
         this.hisHongbao = res.data;
         // if(res.limit_map) {
         //   this.islimit = true;
@@ -78,7 +78,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .coupon {
   .content {
     padding: 0.68438rem 0.11719rem 0.23438rem;

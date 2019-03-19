@@ -57,12 +57,12 @@ export default {
         //用于表示用户代理是否应该在跨域请求的情况下从其他域发送cookies。不使用缓存数据
         withCredentials: true // 默认false
       }).then(res => {
-        console.log(res);
+        // console.log(res);
         this.code = res.data.code;
       });
     },
     duihuan() {
-      console.log(this.userId);
+      // console.log(this.userId);
       const url =
         "https://elm.cangdu.org/v1/users/" + this.userId + "/hongbao/exchange";
       this.$http({
@@ -73,19 +73,19 @@ export default {
           captcha_code: this.captcha
         }
       }).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.data.message) {
           this.erro = res.data.message;
           this.isshow = true;
         }
-        console.log(this.isshow,this.erro)
+        // console.log(this.isshow,this.erro)
       });
     }
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .exchange {
   .content {
     padding-top: 0.45rem;

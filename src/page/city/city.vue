@@ -107,7 +107,7 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .cityCounter {
   padding-top: 0.55rem;
   .cityForm {

@@ -107,10 +107,10 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .payment {
   .blue {
-    color: #4cd964;
+    color: #232b24;
   }
   .remainTime {
     height: 1.15rem;

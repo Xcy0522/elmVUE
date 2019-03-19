@@ -101,7 +101,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .benefit {
   .choose {
     padding-top: 0.45rem;

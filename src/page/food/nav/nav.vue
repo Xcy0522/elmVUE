@@ -283,7 +283,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .food_nav.nav_warp {
   height:100%;
   background-color:rgba(0,0,0,0.3);

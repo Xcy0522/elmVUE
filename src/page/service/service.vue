@@ -19,11 +19,19 @@
     <!-- 热门问题  -->
     <h4 class="problem">热门问题</h4>
     <div class="vip">
+<<<<<<< HEAD
       <section class="showDel">       
           <ul class="wrap">
             <li class="queDetail" v-for="(v,i) in Object.values(con).length/2" :key="i"  >
               <div style="display: inline-block" v-if='(Object.values(con)[2*(v-1)-1]!=Object.values(con)[2*v-1])' @touchend="gotoDetail(Object.values(con)[2*v])">
                 {{Object.values(con)[2*v-1]}}  <span class="iconfont icon-you"></span>
+=======
+      <section>       
+          <ul>
+            <li v-for="(v,i) in Object.values(con).length/2" :key="i"   v-show='(Object.values(con)[2*(v-1)-1]!=Object.values(con)[2*v-1])' @touchend="gotoDetail(Object.values(con)[2*v])">
+              <div style="display: inline-block">
+                {{Object.values(con)[2*v-1]}}                
+>>>>>>> 2e7dab203563a268f90253dca9a6739aa984dbd3
               </div>
             </li>
           </ul>        
