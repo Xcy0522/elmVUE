@@ -136,7 +136,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .forget_top {
   header {
     height: 0.9rem;

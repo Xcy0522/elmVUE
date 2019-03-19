@@ -19,20 +19,16 @@
     <!-- 热门问题  -->
     <h4 class="problem">热门问题</h4>
     <div class="vip">
-      <section>       
-          <ul>
-            <li v-for="(v,i) in Object.values(con).length/2" :key="i"  >
+      <section class="showDel">       
+          <ul class="wrap">
+            <li class="queDetail" v-for="(v,i) in Object.values(con).length/2" :key="i"  >
               <div style="display: inline-block" v-if='(Object.values(con)[2*(v-1)-1]!=Object.values(con)[2*v-1])' @touchend="gotoDetail(Object.values(con)[2*v])">
-                {{Object.values(con)[2*v-1]}}                
+                {{Object.values(con)[2*v-1]}}  <span class="iconfont icon-you"></span>
               </div>
-              <span class="iconfont icon-you"></span>
             </li>
           </ul>        
       </section>
     </div>
-    <router-view>说我的无多</router-view>
-
-
   </div>
 </template>
 
@@ -62,9 +58,7 @@ export default {
         // 删除index属性
         delete res.data.index;//js方法
         this.$set(this,'con',res.data);         
-        console.log(this.con,"..................")
-        // this.$store.state.questionDetailArr = 
-  
+        console.log(this.con,"..................") 
       });
     },
     gotoDetail(canshu){
@@ -76,7 +70,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .service_content {
   margin-top: 0.5rem;
   height: 1rem;
@@ -97,6 +91,7 @@ export default {
     height: 100%;
     float: right;
   }
+}
 .problem {
   height: 0.71rem;
   line-height: 0.71rem;
@@ -106,18 +101,18 @@ export default {
   padding-left: 0.15rem;
 }
 .vip {
-  section {
-    ul {
+  .showDel {
+    .wrap {
       line-height: 0.47rem;
       font-size: 0.13rem;
       color: #666;
       background: white;
-      li {
+      .queDetail {
         border-bottom: 0.01rem solid #f5f5f5;
         padding: 0 0.15rem;
       }
     }
   }
 }
-}
+
 </style>

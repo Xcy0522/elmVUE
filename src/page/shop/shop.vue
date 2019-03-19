@@ -14,7 +14,7 @@
                 {{shopInfo.delivery_mode&&shopInfo.delivery_mode.text||"商家配送"}}&nbsp;&nbsp;
                 /&nbsp;&nbsp;分钟送达&nbsp;&nbsp;/&nbsp;&nbsp;{{shopInfo.piecewise_agent_fee&&shopInfo.piecewise_agent_fee.tips}}
               </p>
-              <p>公告:{{shopInfo.promotion_info}}</p>
+              <p>公告:{{shopInfo.promotion_info}}</p>  
             </section>
             <!-- 优惠活动开始 -->
             <div

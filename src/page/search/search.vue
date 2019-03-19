@@ -105,7 +105,7 @@ export default {
   } 
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .search {
   .form {
     padding: 0.57rem 0.12rem 0.12rem;

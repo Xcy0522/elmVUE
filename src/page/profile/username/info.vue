@@ -1,7 +1,7 @@
 <template>
   <div class="info">
     <headCom :head="head"></headCom>
-    <section class="top">
+    <section class="top2">
       <label class="ui_button" for="xFile">
         <div class="headPhoto">
           <h2>头像</h2>
@@ -96,8 +96,9 @@ export default {
 
 <style lang="scss" scoped>
 .info {
-  .top {
+  .top2 {
     padding-top: 0.45rem;
+    // height: .2rem;
     .headPhoto {
       height: 0.5rem;
       line-height: 0.5rem;

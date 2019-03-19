@@ -45,9 +45,30 @@ export default {
           "<a href='javascript:history.back(-1)'><i class='el-icon-arrow-left'></i></a>",
         cont: "订单列表",
         right: ""
-      }
+      },
+      uesrId: localStorage.getItem("uesrId")
     };
-  }
+  },
+  created() {
+    this.getMessage();
+  },
+  methods: {
+    getMessage(){
+      const url = "https://elm.cangdu.org/bos/v2/users/1/orders"
+      this.$http({
+        method:"get",
+        url: url,
+        params: {
+          limit  : 10,
+          offset: 0,
+        }
+      }).then((res)=>{
+        console.log(res)
+
+      })
+    }
+  },
+
 };
 </script>
 

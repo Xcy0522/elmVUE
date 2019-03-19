@@ -1,6 +1,6 @@
 <template>
   <div class="appranse">
-    <header class="top">
+    <header class="top2">
       <section class="left">
         <p>{{Number(evaluateScore.overall_score).toFixed(1)}}</p>
         <p>综合评价</p>
@@ -158,7 +158,7 @@ export default {
 
 <style lang="scss">
 .appranse {
-  .top {
+  .top2 {
     display: flex;
     background-color: #fff;
     height: 0.723rem;
@@ -195,9 +195,9 @@ export default {
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        span:first-child {
-          margin-right: 0.05rem;
-        }
+        // span:first-child {
+        //   margin-right: 0.05rem;
+        // }
         span:last-child {
           margin-left: 0.1rem;
         }
